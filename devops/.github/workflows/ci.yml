@@ -1,0 +1,28 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+        working-directory: ${{ matrix.service }}
+      - name: Lint
+        run: npm run lint
+        working-directory: ${{ matrix.service }}
+      - name: Build
+        run: npm run build
+        working-directory: ${{ matrix.service }}
