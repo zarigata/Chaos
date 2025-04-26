@@ -6,6 +6,7 @@ import { User } from '../entity/User';
 import dotenv from 'dotenv';
 import { validateDto } from '../middleware/validate';
 import { RegisterDto } from '../dto/RegisterDto';
+import { LoginDto } from '../dto/LoginDto';
 
 dotenv.config();
 const router = Router();
@@ -34,9 +35,9 @@ router.post('/register', validateDto(RegisterDto), async (req: Request, res: Res
 });
 
 // Login existing user
-router.post('/login', async (req: Request, res: Response) => {
+router.post('/login', validateDto(LoginDto), async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as LoginDto;
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required.' });
     }

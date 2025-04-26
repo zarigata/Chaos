@@ -4,6 +4,7 @@ import { Server as SocketIOServer, Socket } from 'socket.io';
 import dotenv from 'dotenv';
 import { AppDataSource } from './data-source';
 import authRouter from './routes/auth';
+import { errorHandler } from './middleware/errorHandler';
 
 // Load env
 dotenv.config();
@@ -14,6 +15,9 @@ AppDataSource.initialize().then(() => {
 
   // Auth routes
   app.use('/auth', authRouter);
+
+  // Global error handler
+  app.use(errorHandler);
 
   const server = http.createServer(app);
   const io = new SocketIOServer(server, { cors: { origin: '*' } });
