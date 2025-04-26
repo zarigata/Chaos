@@ -4,15 +4,17 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import dotenv from 'dotenv';
+import { validateDto } from '../middleware/validate';
+import { RegisterDto } from '../dto/RegisterDto';
 
 dotenv.config();
 const router = Router();
 const userRepo = AppDataSource.getRepository(User);
 
 // Register a new user
-router.post('/register', async (req: Request, res: Response) => {
+router.post('/register', validateDto(RegisterDto), async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password } = req.body as RegisterDto;
     if (!username || !email || !password) {
       return res.status(400).json({ message: 'Username, email, and password are required.' });
     }
