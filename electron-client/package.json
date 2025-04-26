@@ -1,0 +1,28 @@
+{
+  "name": "chaos-electron-client",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "lint": "eslint 'src/**/*.{ts,js}'",
+    "prettier:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "@electron-forge/maker-deb": "^6.0.0-beta.61",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.61",
+    "@electron-forge/maker-zip": "^6.0.0-beta.61",
+    "@electron-forge/plugin-typescript": "^1.0.0-beta.13",
+    "electron": "^25.2.0",
+    "eslint": "^8.43.0",
+    "@typescript-eslint/parser": "^5.59.11",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "prettier": "^3.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-config-prettier": "^9.0.0"
+  },
+  "dependencies": {}
+}
