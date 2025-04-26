@@ -22,6 +22,12 @@ export class User {
 
   @Column()
   password!: string;
+  // Security question for account recovery
+  @Column({ default: '' })
+  securityQuestion!: string;
+  // Hashed answer to security question
+  @Column({ default: '' })
+  securityAnswer!: string;
 
   @ManyToMany(() => Role, (role: Role) => role.users)
   @JoinTable()
