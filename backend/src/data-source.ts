@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { User } from './entity/User';
 import { Role } from './entity/Role';
 import { Guild } from './entity/Guild';
+import { Message } from './entity/Message';
 
 dotenv.config();
 
@@ -12,5 +13,5 @@ export const AppDataSource = new DataSource({
   url: process.env.database_url,
   synchronize: true,
   logging: false,
-  entities: [User, Role, Guild],
+  entities: [User, Role, Guild, Message],
 });

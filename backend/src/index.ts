@@ -9,6 +9,8 @@ import guildsRouter from './routes/guilds';
 import { errorHandler } from './middleware/errorHandler';
 import { socketAuth } from './middleware/socketAuth';
 import { User } from './entity/User';
+import { Guild } from './entity/Guild';
+import { Message } from './entity/Message';
 
 // Load env
 dotenv.config();
@@ -38,6 +40,22 @@ AppDataSource.initialize().then(() => {
     console.log(`User ${user.username} connected: ${socket.id}`);
     // Auto-join user to their guild rooms
     user.guilds.forEach((g) => socket.join(g.id));
+
+    // Real-time messaging within guilds
+    socket.on('guild:sendMessage', async ({ guildId, content }: { guildId: string; content: string }) => {
+      try {
+        const messageRepo = AppDataSource.getRepository(Message);
+        const guild = await AppDataSource.getRepository(Guild).findOne({ where: { id: guildId } });
+        if (!guild) return socket.emit('error', { message: 'Guild not found' });
+        const msg = messageRepo.create({ content, author: user, guild });
+        await messageRepo.save(msg);
+        io.to(guildId).emit('guild:message', msg);
+      } catch (err) {
+        console.error(err);
+        socket.emit('error', { message: 'Send failed' });
+      }
+    });
+
     socket.on('disconnect', () => console.log(`User disconnected: ${socket.id}`));
   });
 
