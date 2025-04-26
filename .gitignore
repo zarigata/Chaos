@@ -1,0 +1,28 @@
+# Monorepo ignores
+node_modules/
+dist/
+.env
+.DS_Store
+build/
+coverage/
+logs/
+*.log
+
+# Backend
+/backend/node_modules/
+/backend/dist/
+
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
+
+# Electron
+/electron-client/node_modules/
+/electron-client/dist/
+/electron-client/out/
+
+# Terraform
+/infra/terraform/.terraform/
+
+# DevOps logs
+devops/.github/**/logs/
