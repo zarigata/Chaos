@@ -94,5 +94,21 @@ C.H.A.O.S is a cross-platform desktop application (Electron) and web service tha
    npm start
    ```
 
+## Setup
+
+### Backend
+- cd backend
+- cp .env.example .env
+- Edit `.env` to set `database_url` (Postgres URL) and `jwt_secret`
+- npm install
+- npm run dev
+
+### Frontend
+- cd frontend
+- npm install
+- npm run dev
+
+Navigate to http://localhost:3001 to access the app.
+
 ## License & Contributing
 Contributions welcome. Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.

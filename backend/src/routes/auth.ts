@@ -10,6 +10,7 @@ import { LoginDto } from '../dto/LoginDto';
 import { authenticate, AuthRequest } from '../middleware/auth';
 
 dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET || process.env.jwt_secret!;
 const router = Router();
 const userRepo = AppDataSource.getRepository(User);
 
@@ -27,7 +28,7 @@ router.post('/register', validateDto(RegisterDto), async (req: Request, res: Res
     const hash = await bcrypt.hash(password, 10);
     const user = userRepo.create({ username, email, password: hash });
     await userRepo.save(user);
-    const token = jwt.sign({ id: user.id }, process.env.jwt_secret as string, { expiresIn: '1d' });
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1d' });
     return res.status(201).json({ token, user: { id: user.id, username, email } });
   } catch (err) {
     console.error(err);
@@ -50,7 +51,7 @@ router.post('/login', validateDto(LoginDto), async (req: Request, res: Response)
     if (!valid) {
       return res.status(400).json({ message: 'Invalid credentials.' });
     }
-    const token = jwt.sign({ id: user.id }, process.env.jwt_secret as string, { expiresIn: '1d' });
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1d' });
     return res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
   } catch (err) {
     console.error(err);

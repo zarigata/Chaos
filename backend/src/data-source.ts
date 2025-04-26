@@ -7,10 +7,12 @@ import { Guild } from './entity/Guild';
 import { Message } from './entity/Message';
 
 dotenv.config();
+dotenv.config();
+const databaseUrl = process.env.DATABASE_URL || process.env.database_url;
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  url: process.env.database_url,
+  url: databaseUrl,
   synchronize: true,
   logging: false,
   entities: [User, Role, Guild, Message],

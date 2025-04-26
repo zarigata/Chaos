@@ -27,8 +27,12 @@ const Chat: React.FC = () => {
         body: JSON.stringify(isRegister ? { username, email, password } : { email, password }),
       });
       if (!res.ok) {
-        const err = await res.json();
-        const errMsg = err.message || (err.errors ? err.errors.join(', ') : `${isRegister ? 'Registration' : 'Login'} failed`);
+        const errBody = await res.json().catch(() => ({}));
+        const errorsList = errBody.errors ?? [];
+        const errMsg = errorsList.length
+          ? errorsList.join(', ')
+          : errBody.message ?? `${isRegister ? 'Registration' : 'Login'} failed`;
+        console.error('Auth error:', errBody);
         alert(errMsg);
         return;
       }
