@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import http from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import dotenv from 'dotenv';
@@ -17,6 +18,7 @@ dotenv.config();
 
 AppDataSource.initialize().then(() => {
   const app = express();
+  app.use(cors({ origin: '*' }));
   app.use(express.json());
 
   // Auth routes

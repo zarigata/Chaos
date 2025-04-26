@@ -12,22 +12,22 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "socket.io-client": "^4.6.1"
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
-    "typescript": "^5.1.6",
-    "vite": "^4.4.0",
+    "@types/react": "^18.2.7",
+    "@types/react-dom": "^18.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
     "@vitejs/plugin-react": "^3.1.0",
-    "tailwindcss": "^3.4.6",
-    "postcss": "^8.4.14",
     "autoprefixer": "^10.4.7",
     "eslint": "^8.43.0",
-    "@typescript-eslint/parser": "^5.59.11",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "prettier": "^3.0.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "eslint-config-prettier": "^9.0.0",
-    "@types/react": "^18.2.7",
-    "@types/react-dom": "^18.2.4"
+    "eslint-plugin-prettier": "^4.2.1",
+    "postcss": "^8.4.14",
+    "prettier": "^3.0.0",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.0"
   }
 }
