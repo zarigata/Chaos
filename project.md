@@ -1,7 +1,7 @@
-# Discord Clone Project
+# C.H.A.O.S: MSN/Discord Hybrid Project
 
 ## Overview
-A full-stack Discord-like platform for real-time text, voice, and video communication with server (guild) management, roles, and private messaging.
+A full-stack MSN and Discord hybrid platform featuring real-time text, voice, and video communication, MSN-inspired contact list UI, and dark mode support.
 
 ## Repository Structure
 
@@ -25,3 +25,5 @@ steps.md                # Development roadmap & steps
 - Bot framework
 - Cross-platform desktop client via Electron
 - Scalable DevOps with Docker, Kubernetes, CI/CD, monitoring
+- MSN-like contact list & emoticon support
+- Dark theme with custom skins

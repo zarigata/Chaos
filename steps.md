@@ -1,4 +1,5 @@
-# Development Roadmap & Steps
+# C.H.A.O.S: MSN/Discord Hybrid Development Roadmap & Steps
+- MSN-inspired theme & dark mode support
 
 ## Phase 1: Scaffold & Tooling
 1. Initialize monorepo structure and basic README files.  
