@@ -1,6 +1,7 @@
 import React from 'react';
 import Chat from './Chat';
 import StartPage from './StartPage';
+import Layout from './Layout';
 import { useState } from 'react';
 
 const App: React.FC = () => {
@@ -9,7 +10,7 @@ const App: React.FC = () => {
   return (
     <>
       {started ? (
-        <Chat />
+        <Layout />
       ) : (
         <StartPage onStart={() => setStarted(true)} />
       )}
