@@ -43,6 +43,9 @@ const Chat: React.FC = () => {
         return;
       }
       const data = await res.json();
+      // Persist auth data for other components
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
     } catch (err) {

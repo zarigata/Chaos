@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { AppDataSource } from '../data-source';
 import { Guild } from '../entity/Guild';
+import { Message } from '../entity/Message';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { validateDto } from '../middleware/validate';
 import { IsString, MinLength } from 'class-validator';

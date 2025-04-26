@@ -12,6 +12,7 @@ import { socketAuth } from './middleware/socketAuth';
 import { User } from './entity/User';
 import { Guild } from './entity/Guild';
 import { Message } from './entity/Message';
+import path from 'path';
 
 // Load env
 dotenv.config();
@@ -30,6 +31,14 @@ AppDataSource.initialize().then(() => {
   app.use(errorHandler);
 
   const server = http.createServer(app);
+
+  // Serve frontend static build
+  const frontendPath = path.resolve(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendPath));
+  app.get('*', (_req: Request, res: Response) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+
   const io = new SocketIOServer(server, { cors: { origin: '*' } });
   io.use(socketAuth);
 
