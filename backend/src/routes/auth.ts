@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import { validateDto } from '../middleware/validate';
 import { RegisterDto } from '../dto/RegisterDto';
 import { LoginDto } from '../dto/LoginDto';
+import { authenticate, AuthRequest } from '../middleware/auth';
 
 dotenv.config();
 const router = Router();
@@ -60,6 +61,12 @@ router.post('/login', validateDto(LoginDto), async (req: Request, res: Response)
 // Logout (client should discard token)
 router.post('/logout', (_req: Request, res: Response) => {
   return res.json({ message: 'Logged out.' });
+});
+
+// Get current authenticated user
+router.get('/me', authenticate, (_req: Request, res: Response) => {
+  const user = (_req as AuthRequest).user!;
+  return res.json({ id: user.id, username: user.username, email: user.email });
 });
 
 export default router;
