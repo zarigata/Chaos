@@ -1,5 +1,6 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { io, Socket } from 'socket.io-client';
+import Layout from './Layout';
 
 interface Guild { id: string; name: string; }
 interface User { id: string; username: string; email: string; }
@@ -27,7 +28,7 @@ const Chat: React.FC = () => {
   const handleAuth = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:3000/auth${isRegister ? '/register' : '/login'}`, {
+      const res = await fetch(`/auth${isRegister ? '/register' : '/login'}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(isRegister ? { username, email, password } : { email, password }),
@@ -57,7 +58,7 @@ const Chat: React.FC = () => {
   const handleForgotSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:3000/auth/forgot', {
+      const res = await fetch('/auth/forgot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: forgotEmail }),
@@ -79,7 +80,7 @@ const Chat: React.FC = () => {
   const handleResetSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:3000/auth/reset', {
+      const res = await fetch('/auth/reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: forgotEmail, securityAnswer, newPassword }),
@@ -100,9 +101,9 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      const s = io('http://localhost:3000', { auth: { token } });
+      const s = io({ auth: { token } });
       setSocket(s);
-      fetch('http://localhost:3000/guilds', { headers: { Authorization: `Bearer ${token}` } })
+      fetch('/guilds', { headers: { Authorization: `Bearer ${token}` } })
         .then(r => r.json())
         .then(setGuilds)
         .catch(console.error);
@@ -121,12 +122,14 @@ const Chat: React.FC = () => {
     }
   }, [socket, currentGuild]);
 
-  const sendMessage = () => {
-    if (socket && currentGuild && message.trim()) {
-      socket.emit('guild:sendMessage', { guildId: currentGuild.id, content: message });
-      setMessage('');
+  useEffect(() => {
+    if (currentGuild && token) {
+      fetch(`/guilds/${currentGuild.id}/messages`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(r => r.json())
+        .then(setMessages)
+        .catch(console.error);
     }
-  };
+  }, [currentGuild, token]);
 
   if (!token) {
     if (isForgot) {
@@ -187,36 +190,14 @@ const Chat: React.FC = () => {
   }
 
   return (
-    <div className="h-screen grid grid-rows-[auto,1fr] bg-gray-900 text-white">
-      <div className="p-4 flex items-center space-x-4 bg-gray-800">
-        <span>Logged in as {user?.username}</span>
-        <select value={currentGuild?.id || ''} onChange={e => {
-          const g = guilds.find(g => g.id === e.target.value) || null;
-          setCurrentGuild(g);
-          setMessages([]);
-        }} className="bg-gray-700 p-2 rounded">
-          <option value="">Select Guild</option>
-          {guilds.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
-        </select>
-      </div>
-      <div className="flex flex-col">
-        <div className="flex-1 overflow-auto p-4">
-          {messages.map(m => (
-            <div key={m.id} className="mb-2">
-              <span className="font-bold text-red-500">{m.author.username}</span>: {m.content}
-              <div className="text-xs text-gray-500">{new Date(m.createdAt).toLocaleTimeString()}</div>
-            </div>
-          ))}
-        </div>
-        <div className="p-4 bg-gray-800">
-          <div className="flex space-x-2">
-            <input value={message} onChange={e => setMessage(e.target.value)} placeholder="Type a message"
-              className="flex-1 p-2 bg-gray-700 rounded" />
-            <button onClick={sendMessage} className="p-2 bg-red-600 rounded">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Layout
+      user={user}
+      guilds={guilds}
+      currentGuild={currentGuild}
+      messages={messages}
+      onSelectGuild={(g: Guild) => { setCurrentGuild(g); setMessages([]); }}
+      onSend={(content: string) => { socket?.emit('guild:sendMessage', { guildId: currentGuild!.id, content }); }}
+    />
   );
 };
 
