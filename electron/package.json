@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "chaos-desktop": "file:",
-    "electron": "^25.0.0"
+    "electron": "^25.0.0",
+    "electron-updater": "^4.6.5"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.61",
