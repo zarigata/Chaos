@@ -17,9 +17,11 @@ import path from 'path';
 // Load env
 dotenv.config();
 
+const FRONTEND_URL = process.env.FRONTEND_URL || '*';
+
 AppDataSource.initialize().then(() => {
   const app = express();
-  app.use(cors({ origin: '*' }));
+  app.use(cors({ origin: FRONTEND_URL, credentials: true }));
   app.use(express.json());
 
   // Auth routes
@@ -39,7 +41,7 @@ AppDataSource.initialize().then(() => {
     res.sendFile(path.join(frontendPath, 'index.html'));
   });
 
-  const io = new SocketIOServer(server, { cors: { origin: '*' } });
+  const io = new SocketIOServer(server, { cors: { origin: FRONTEND_URL, methods: ['GET','POST'], credentials: true } });
   io.use(socketAuth);
 
   // Basic health check
