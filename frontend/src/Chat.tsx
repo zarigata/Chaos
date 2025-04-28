@@ -2,6 +2,8 @@ import React, { useState, useEffect, FormEvent } from 'react';
 import { io, Socket } from 'socket.io-client';
 import Layout from './Layout';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 interface Guild { id: string; name: string; }
 interface User { id: string; username: string; email: string; }
 interface Message { id: string; content: string; author: User; guild: Guild; createdAt: string; }
@@ -28,7 +30,7 @@ const Chat: React.FC = () => {
   const handleAuth = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/auth${isRegister ? '/register' : '/login'}`, {
+      const res = await fetch(`${API_URL}/auth${isRegister ? '/register' : '/login'}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(isRegister ? { username, email, password } : { email, password }),
@@ -58,7 +60,7 @@ const Chat: React.FC = () => {
   const handleForgotSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/auth/forgot', {
+      const res = await fetch(`${API_URL}/auth/forgot`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: forgotEmail }),
@@ -80,7 +82,7 @@ const Chat: React.FC = () => {
   const handleResetSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/auth/reset', {
+      const res = await fetch(`${API_URL}/auth/reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: forgotEmail, securityAnswer, newPassword }),
@@ -101,9 +103,9 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      const s = io({ auth: { token } });
+      const s = io(API_URL || undefined, { auth: { token } });
       setSocket(s);
-      fetch('/guilds', { headers: { Authorization: `Bearer ${token}` } })
+      fetch(`${API_URL}/guilds`, { headers: { Authorization: `Bearer ${token}` } })
         .then(r => r.json())
         .then(setGuilds)
         .catch(console.error);
@@ -124,7 +126,7 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (currentGuild && token) {
-      fetch(`/guilds/${currentGuild.id}/messages`, { headers: { Authorization: `Bearer ${token}` } })
+      fetch(`${API_URL}/guilds/${currentGuild.id}/messages`, { headers: { Authorization: `Bearer ${token}` } })
         .then(r => r.json())
         .then(setMessages)
         .catch(console.error);
